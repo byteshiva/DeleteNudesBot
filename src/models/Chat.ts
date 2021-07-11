@@ -2,7 +2,7 @@ import { prop, getModelForClass } from '@typegoose/typegoose'
 
 export class Chat {
   @prop({ required: true, index: true, unique: true })
-  id: number
+  telid: number
 
   @prop({ required: true, default: 'en' })
   language: string
@@ -14,14 +14,14 @@ const ChatModel = getModelForClass(Chat, {
 })
 
 // Get or create chat
-export async function findChat(id: number) {
-  let chat = await ChatModel.findOne({ id })
+export async function findChat(telid: number) {
+  let chat = await ChatModel.findOne({ telid })
   if (!chat) {
     // Try/catch is used to avoid race conditions
     try {
-      chat = await new ChatModel({ id }).save()
+      chat = await new ChatModel({ telid }).save()
     } catch (err) {
-      chat = await ChatModel.findOne({ id })
+      chat = await ChatModel.findOne({ telid })
     }
   }
   return chat
